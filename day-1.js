@@ -1043,6 +1043,7 @@ const list = `
 62772   51158
 69487   20471`;
 
+// Solution Steps/Pseudo Code
 // Turn input string into array
 const inputArray = list.replaceAll("   ", "\n").split("\n");
 inputArray.shift();
@@ -1050,17 +1051,17 @@ inputArray.shift();
 // Filter into 2 arrays
 const leftList = inputArray.filter((ele, index) => index % 2 === 0);
 const rightList = inputArray.filter((ele, index) => index % 2 === 1);
-// Sort each array in ascending order
+// Sort both array in ascending order
 leftList.sort((a, b) => a - b);
 rightList.sort((a, b) => a - b);
-// User accumulator pattern
+// Use accumulator pattern
 let totalDistance = 0;
-// Go through arrays, get absolute difference between each number at same respective index
+// Go through leftList array, get absolute difference between numbers at same respective index
 for (let i = 0; i < leftList.length; i++) {
   totalDistance += Math.abs(leftList[i] - rightList[i]);
 }
 // Return total.
-console.log(totalDistance);
+// console.log(totalDistance);
 // 1646452
 
 /*
@@ -1093,3 +1094,23 @@ So, for these example lists, the similarity score at the end of this process is 
 
 Once again consider your left and right lists. What is their similarity score?
 */
+
+// Create freq obj for numbers in right list
+const freqObj = {};
+for (let num of rightList) {
+  freqObj[num] = freqObj[num] + 1 || 1;
+}
+// Use accumulator pattern
+let totalSimilarityScore = 0;
+// Go through leftList
+for (let number of leftList) {
+  // Add to accumulator the product of the current number and the amount of times it appears in the right list.
+  if (freqObj[number] === undefined) {
+    totalSimilarityScore += 0;
+  } else {
+    totalSimilarityScore += Number(number) * freqObj[number];
+  }
+}
+// Return total
+console.log(totalSimilarityScore);
+// 23609874
