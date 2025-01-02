@@ -33,7 +33,14 @@ So, in this example, 2 reports are safe.
 
 Analyze the unusual data from the engineers. How many reports are safe?
 */
-
+const testData = `
+7 6 4 2 1
+1 2 7 8 9
+9 7 6 2 1
+1 3 2 4 5
+8 6 4 4 1
+1 3 6 7 9
+`;
 const data = `
 75 76 77 80 82 85 84
 49 52 53 55 58 59 61 61
@@ -1036,3 +1043,47 @@ const data = `
 53 56 59 61 63 65 67 70
 48 45 43 41 38 37 34
 `;
+
+// Transform data in an array of reports/subarray
+const transformedData = data.split("\n");
+transformedData.shift();
+transformedData.pop();
+const matrixData = transformedData.map((report) =>
+  report.split(" ").map((num) => parseInt(num))
+);
+
+// filter out all arrays that is not strictly decreasing or strictly increasing
+// create function to check increasing and decreasing array
+function checkIncreasingAndDecreasing(array) {
+  for (let i = 1; i < array.length - 1; i++) {
+    if (array[i] <= array[i - 1] && array[i] <= array[i + 1]) {
+      return false;
+    }
+    if (array[i] >= array[i - 1] && array[i] >= array[i + 1]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+const filteredData = matrixData.filter((report) =>
+  checkIncreasingAndDecreasing(report)
+);
+// filter out all arrays where the increase or decrease is more that 3
+// create function to check if increase and decrease is more that 3
+function checkIncreaseOrDecreaseMoreThanThree(array) {
+  for (let i = 0; i < array.length - 1; i++) {
+    if (Math.abs(array[i] - array[i + 1]) > 3) {
+      return false;
+    }
+  }
+  return true;
+}
+
+const saveReportData = filteredData.filter((report) =>
+  checkIncreaseOrDecreaseMoreThanThree(report)
+);
+
+// return length of array
+console.log(saveReportData.length);
+// 428
